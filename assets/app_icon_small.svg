@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <defs>
+    <linearGradient id="field" x1="0" y1="0" x2="0.35" y2="1">
+      <stop offset="0" stop-color="#24418F"/>
+      <stop offset="1" stop-color="#2E7A78"/>
+    </linearGradient>
+  </defs>
+  <!-- simplified for 16-24 px: sandstone arch, blue-teal field, bold step curve -->
+  <rect x="1" y="29" width="30" height="3" rx="1" fill="#CDB074" stroke="#8E7037" stroke-width="0.8"/>
+  <path d="M3 29 V14 A13 13 0 0 1 29 14 V29 Z" fill="#E8D3A0" stroke="#8E7037" stroke-width="1"/>
+  <path d="M6.5 29 V14.5 A9.5 9.5 0 0 1 25.5 14.5 V29 Z" fill="url(#field)"/>
+  <path d="M8 27 C 10.5 27, 11 13, 13.5 12.5 C 16 12, 16.5 18.5, 19 18.3 C 21 18.1, 22 16, 24.5 16.5"
+        fill="none" stroke="#FFF3CF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
