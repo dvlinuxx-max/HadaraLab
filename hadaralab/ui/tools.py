@@ -174,7 +174,7 @@ class PIDTuner(ToolDialog):
         self.ws_combo.currentTextChanged.connect(self._load_ws)
         g.addWidget(self.ws_combo, 2, 0, 1, 2)
         self.plant_lbl = QLabel()
-        set_css(self.plant_lbl, "font-family: Consolas; color: #1565C0;")
+        set_css(self.plant_lbl, "font-family: 'JetBrains Mono', Consolas; color: #1565C0;")
         self.plant_lbl.setWordWrap(True)
         g.addWidget(self.plant_lbl, 3, 0, 1, 2)
         left.addWidget(gb)
@@ -458,7 +458,7 @@ class RouthTool(ToolDialog):
 
         self.eq = QLabel()
         self.eq.setWordWrap(True)
-        set_css(self.eq, "font-family: Consolas; font-size: 10.5pt; color: #1565C0; padding: 4px;")
+        set_css(self.eq, "font-family: 'JetBrains Mono', Consolas; font-size: 10.5pt; color: #1565C0; padding: 4px;")
         left.addWidget(self.eq)
         self.verdict = banner()
         left.addWidget(self.verdict)
@@ -768,7 +768,7 @@ class BlockDiagramTool(ToolDialog):
         self.result.setWordWrap(True)
         self.result.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
         set_css(self.result, "background: #F3F8FF; border: 1px solid #DCE6F2; border-radius: 10px;"
-                                  " padding: 10px; font-family: Consolas; font-size: 10.5pt;")
+                                  " padding: 10px; font-family: 'JetBrains Mono', Consolas; font-size: 10.5pt;")
         left.addWidget(self.result)
         self.verdict = banner()
         left.addWidget(self.verdict)

@@ -1,14 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 100 100">
   <defs>
-    <linearGradient id="field" x1="0" y1="0" x2="0.35" y2="1">
-      <stop offset="0" stop-color="#24418F"/>
-      <stop offset="1" stop-color="#2E7A78"/>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1F388C"/><stop offset="1" stop-color="#2E8C80"/>
     </linearGradient>
   </defs>
-  <!-- simplified for 16-24 px: sandstone arch, blue-teal field, bold step curve -->
-  <rect x="1" y="29" width="30" height="3" rx="1" fill="#CDB074" stroke="#8E7037" stroke-width="0.8"/>
-  <path d="M3 29 V14 A13 13 0 0 1 29 14 V29 Z" fill="#E8D3A0" stroke="#8E7037" stroke-width="1"/>
-  <path d="M6.5 29 V14.5 A9.5 9.5 0 0 1 25.5 14.5 V29 Z" fill="url(#field)"/>
-  <path d="M8 27 C 10.5 27, 11 13, 13.5 12.5 C 16 12, 16.5 18.5, 19 18.3 C 21 18.1, 22 16, 24.5 16.5"
-        fill="none" stroke="#FFF3CF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="2" y="2" width="96" height="96" rx="20" fill="url(#g)"/>
+  <g transform="translate(11.00 13.17) scale(0.78)">
+    <path d="M 8 88 V 50 A 24 26 0 0 1 32 24 V 17 H 41 V 9 H 59 V 17 H 68 V 24 A 24 26 0 0 1 92 50 V 88" fill="none" stroke="#FFFFFF" stroke-width="10.5" stroke-linejoin="miter"/>
+    <path d="M 16 85 H 20 C 27 85 30 41 39 41 C 46 41 50 61 61 61 H 83" fill="none" stroke="#FFFFFF" stroke-width="10.5" stroke-linejoin="round"/>
+  </g>
 </svg>

@@ -14,3 +14,6 @@ venv/
 .idea/
 Thumbs.db
 desktop.ini
+
+# Store submission files (local only)
+store/

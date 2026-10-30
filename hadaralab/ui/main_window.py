@@ -19,8 +19,11 @@ from ..engine import Interpreter, MatlabError
 from ..engine.builtins import BUILTINS, HELP
 from .console import CommandWindow
 from .editor import CodeEditor
+from . import fileassoc
 from .figures import FigurePanel
-from .theme import C, asset, qc, save_theme, set_css, theme_name, themed
+from .recovery import RecoverySession
+from .theme import (C, CODE_FONT_SIZES, DEFAULT_CODE_FONT_SIZE, asset, code_font_size, qc, save_code_font_size, save_theme,
+                    set_css, theme_name, themed)
 from .tools import BlockDiagramTool, PIDTuner, RouthTool
 from .workspace import WorkspaceView
 
@@ -39,19 +42,23 @@ PRIVACY_HTML = """
 <li><b>لا يتصل البرنامج بالإنترنت</b>، ولا يرسل أي بيانات أو إحصاءات استخدام أو تقارير أعطال إلى أي جهة.</li>
 <li><b>الملفات التي ينشئها المستخدم</b> (النصوص البرمجية وصور الرسوم البيانية) تُحفظ على جهازه فقط،
 في المكان الذي يختاره بنفسه، والمجلد الافتراضي هو Documents\\HadaraLab.</li>
-<li><b>الإعدادات:</b> يحفظ البرنامج إعداداً واحداً فقط هو المظهر المختار، ويُخزَّن محلياً في سجل نظام Windows.</li>
+<li><b>الإعدادات:</b> يحفظ البرنامج إعدادين فقط هما المظهر المختار وحجم الخط، ويُخزَّنان محلياً في سجل نظام Windows.</li>
+<li><b>النسخ الاحتياطية:</b> تُنسخ النصوص البرمجية غير المحفوظة كل بضع ثوانٍ إلى المجلد
+%LOCALAPPDATA%\\HadaraLab\\recovery على الجهاز فقط، لاستعادتها إذا أُغلق البرنامج فجأة،
+وتُحذف تلقائياً عند الإغلاق الطبيعي.</li>
+<li><b>فتح ملفات .m:</b> عند تفعيل هذا الخيار من قائمة الإعدادات يُضاف البرنامج إلى قائمة
+«فتح باستخدام» في سجل Windows، ويُزال بإلغاء الخيار.</li>
 <li><b>الروابط الخارجية:</b> لا يُفتح الموقع الإلكتروني أو البريد الإلكتروني إلا إذا نقر المستخدم عليهما بنفسه.</li>
-<li><b>حذف البيانات:</b> يكفي حذف مجلد البرنامج والمجلد Documents\\HadaraLab
-ومفتاح السجل HKEY_CURRENT_USER\\Software\\Hadara\\HadaraLab.</li>
+<li><b>حذف البيانات:</b> يكفي حذف مجلد البرنامج والمجلدين Documents\\HadaraLab
+و%LOCALAPPDATA%\\HadaraLab ومفتاح السجل HKEY_CURRENT_USER\\Software\\Hadara\\HadaraLab.</li>
 </ol>
-<h2 style='color:#1565C0'>إشعار بشأن شعار الكلية واسمها</h2>
+<h2 style='color:#1565C0'>إشعار بشأن اسم الكلية</h2>
 <ul>
-<li><b>شعار كلية الحضارة الجامعة واسمها</b> ملكٌ لكلية الحضارة الجامعة.</li>
-<li>يُستخدم الشعار والاسم في هذا البرنامج <b>لأغراض هذا المشروع البرمجي فقط</b>،
+<li><b>اسم كلية الحضارة الجامعة</b> ملكٌ لكلية الحضارة الجامعة.</li>
+<li>يُستخدم الاسم في هذا البرنامج <b>لأغراض هذا المشروع البرمجي فقط</b>،
 بوصفه مشروعاً تابعاً لقسم هندسة تقنيات الحاسوب في الكلية.</li>
-<li><b>لا تشمل رخصة MIT</b> الخاصة بالشيفرة المصدرية شعارَ الكلية ولا اسمها.</li>
-<li>لا يجوز استخدام الشعار أو الاسم أو نسخهما أو تعديلهما أو توزيعهما خارج هذا المشروع
-إلا بإذن مسبق من كلية الحضارة الجامعة.</li>
+<li><b>لا تشمل رخصة MIT</b> الخاصة بالشيفرة المصدرية اسمَ الكلية.</li>
+<li>لا يجوز استخدام الاسم خارج هذا المشروع إلا بإذن مسبق من كلية الحضارة الجامعة.</li>
 </ul>
 <p>للتواصل: <a href='mailto:support@mohmadev.com'>support@mohmadev.com</a> —
 <a href='https://mohmadev.com/'>mohmadev.com</a></p>
@@ -61,12 +68,14 @@ PRIVACY_HTML = """
 <h3>Privacy policy</h3>
 <p>HadaraLab runs entirely on your computer. It collects no personal data, needs no account,
 never connects to the internet and sends no data, statistics or crash reports. Your scripts and
-figures stay where you save them (default folder: Documents\\HadaraLab). Only the chosen theme is
-stored, locally in the Windows registry. Links open only when you click them.</p>
-<h3>Logo and name notice</h3>
-<p>The logo and name of Al-Hadara University College belong to the college and are used solely
-for this software project. They are not covered by the MIT License of the source code and may not
-be used outside this project without the college's prior permission.</p>
+figures stay where you save them (default folder: Documents\\HadaraLab). Only the chosen theme and font
+size are stored, locally in the Windows registry. Unsaved scripts are copied every few seconds to
+%LOCALAPPDATA%\\HadaraLab\\recovery (on your computer only) and deleted when HadaraLab closes
+normally. Links open only when you click them.</p>
+<h3>College name notice</h3>
+<p>The name of Al-Hadara University College belongs to the college and is used solely for this
+software project. It is not covered by the MIT License of the source code and may not be used
+outside this project without the college's prior permission.</p>
 </div>
 """
 
@@ -113,6 +122,7 @@ class EditorTab(QWidget):
         super().__init__(parent)
         self.path = path
         self.editor = CodeEditor(sorted(BUILTINS))
+        self.editor.zoom.connect(lambda d: self.window().step_font_size(d))
         lay = QVBoxLayout(self)
         lay.setContentsMargins(0, 0, 0, 0)
         lay.addWidget(self.editor)
@@ -157,7 +167,7 @@ class StartPage(QScrollArea):
 
         hero = QHBoxLayout()
         logo = QLabel()
-        logo.setPixmap(QPixmap(asset("logo_256.png")).scaled(
+        logo.setPixmap(QPixmap(asset("app_icon_256.png")).scaled(
             110, 110, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation))
         hero.addWidget(logo)
         txt = QLabel(themed(
@@ -221,6 +231,14 @@ class MainWindow(QMainWindow):
         self.bridge.text.connect(self.console.write)
         self.bridge.clc.connect(self.console.clear)
         self.bridge.ask.connect(self._ask_input)
+
+        try:
+            self.recovery = RecoverySession()
+        except OSError:                    # recovery is a safety net; never block start-up
+            self.recovery = None
+        self.autosave_timer = QTimer(self)
+        self.autosave_timer.timeout.connect(self.autosave)
+        self.autosave_timer.start(10_000)
         self.console.write_info(f"HadaraLab {__version__}  —  type  help  for the list of functions.\n")
 
     # -- layout --------------------------------------------------------------
@@ -303,7 +321,7 @@ class MainWindow(QMainWindow):
         lay.setContentsMargins(14, 6, 14, 6)
         lay.setSpacing(8)
         logo = QLabel()
-        logo.setPixmap(QPixmap(asset("logo_256.png")).scaled(
+        logo.setPixmap(QPixmap(asset("app_icon_256.png")).scaled(
             48, 48, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation))
         lay.addWidget(logo)
         titles = QVBoxLayout()
@@ -430,6 +448,14 @@ class MainWindow(QMainWindow):
         em = mb.addMenu("&Edit")
         self._act(em, "Toggle Comment", lambda: self._editor() and self._editor().toggle_comment(),
                   QKeySequence("Ctrl+/"))
+        em.addSeparator()
+        self._act(em, "Increase Font Size  -  تكبير الخط", lambda: self.step_font_size(1),
+                  QKeySequence("Ctrl+="))
+        self._act(em, "Decrease Font Size  -  تصغير الخط", lambda: self.step_font_size(-1),
+                  QKeySequence("Ctrl+-"))
+        self._act(em, "Reset Font Size  -  الحجم الافتراضي",
+                  lambda: self.choose_font_size(DEFAULT_CODE_FONT_SIZE), QKeySequence("Ctrl+0"))
+        em.addSeparator()
         self._act(em, "Clear Command Window", self.console_clear, None)
         self._act(em, "Clear Workspace", lambda: self.run_command("clear", echo=True), None)
         rm = mb.addMenu("&Run")
@@ -451,10 +477,114 @@ class MainWindow(QMainWindow):
             a.triggered.connect(lambda _=False, k=key: self.choose_theme(k))
             group.addAction(a)
             theme_menu.addAction(a)
+        if not fileassoc.is_packaged():    # the Store version declares this in its manifest
+            self.assoc_action = QAction("Open .m Files with HadaraLab  -  فتح ملفات .m بالبرنامج",
+                                        self, checkable=True)
+            try:
+                self.assoc_action.setChecked(fileassoc.is_registered())
+            except OSError:
+                pass
+            self.assoc_action.triggered.connect(self.toggle_file_association)
+            sm.addAction(self.assoc_action)
+        size_menu = sm.addMenu("Font Size  -  حجم الخط")
+        sizes = QActionGroup(self)
+        sizes.setExclusive(True)
+        self.size_actions = {}
+        for size in CODE_FONT_SIZES:
+            a = QAction(f"{size} pt", self, checkable=True)
+            a.setChecked(code_font_size() == size)
+            a.triggered.connect(lambda _=False, s=size: self.choose_font_size(s))
+            sizes.addAction(a)
+            size_menu.addAction(a)
+            self.size_actions[size] = a
         hm = mb.addMenu("&Help")
         self._act(hm, "Function List", self.show_functions, QKeySequence("F1"))
         self._act(hm, "Privacy and Notices  -  الخصوصية والإشعارات", self.show_privacy, None)
         self._act(hm, "About HadaraLab", self.about, None)
+
+    def toggle_file_association(self, on):
+        try:
+            fileassoc.register() if on else fileassoc.unregister()
+        except OSError as err:
+            self.assoc_action.setChecked(not on)
+            QMessageBox.warning(self, "HadaraLab", f"Could not change the setting:\n{err}")
+            return
+        if on:
+            QMessageBox.information(
+                self, "HadaraLab",
+                "HadaraLab now appears in the \"Open with\" list of .m files.\n"
+                "The first time you double-click a .m file, choose HadaraLab and tick "
+                "\"Always use this app\".\n\n"
+                "أصبح البرنامج ضمن قائمة \"فتح باستخدام\" لملفات .m.\n"
+                "عند النقر المزدوج على ملف .m أول مرة، اختر HadaraLab ثم فعّل خيار "
+                "\"استخدام هذا التطبيق دائماً\".")
+
+    # -- recovery ------------------------------------------------------------
+    def autosave(self):
+        """Copy unsaved scripts aside so a crash or power cut does not lose them."""
+        if self.recovery is None:
+            return
+        scripts = []
+        for i in range(self.editors.count()):
+            w = self.editors.widget(i)
+            if isinstance(w, EditorTab) and w.editor.document().isModified():
+                scripts.append({"path": w.path, "title": w.title().rstrip(" •"),
+                                "text": w.editor.toPlainText()})
+        try:
+            self.recovery.save(scripts)
+        except OSError:
+            pass
+
+    def offer_recovery(self):
+        """After an unexpected exit, offer the unsaved scripts back."""
+        if self.recovery is None:
+            return
+        folders = self.recovery.orphans()
+        scripts = self.recovery.load(folders)
+        if not scripts:
+            self.recovery.discard(folders)
+            return
+        names = "\n".join(f"  - {s.get('title') or 'untitled.m'}" for s in scripts[:10])
+        r = QMessageBox.question(
+            self, "Recover unsaved scripts",
+            "HadaraLab was closed unexpectedly. Restore these unsaved scripts?\n"
+            "أُغلق البرنامج بصورة غير متوقعة. هل تريد استعادة النصوص البرمجية غير المحفوظة الآتية؟\n\n"
+            + names,
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+        if r == QMessageBox.StandardButton.Yes:
+            for s in scripts:
+                path = s.get("path") if isinstance(s.get("path"), str) else None
+                tab = self.new_tab(path, s["text"])
+                if not path and s.get("title"):
+                    tab.untitled = s["title"]
+                tab.editor.document().setModified(True)
+                self._refresh_tab_title(tab)
+            self.autosave()                  # now kept by this session
+        self.recovery.discard(folders)
+
+    def choose_font_size(self, size):
+        """Applied at once to every open editor and the Command Window, and remembered."""
+        save_code_font_size(size)
+        for i in range(self.editors.count()):
+            w = self.editors.widget(i)
+            if isinstance(w, EditorTab):
+                w.editor.set_font_size(size)
+        self.console.set_font_size(size)
+        if size in self.size_actions:
+            self.size_actions[size].setChecked(True)
+        self.statusBar().showMessage(f"Font size: {size} pt", 2000)
+
+    def step_font_size(self, direction):
+        """Ctrl + wheel and Ctrl+= / Ctrl+- move through the sizes listed in Settings."""
+        current = code_font_size()
+        if direction > 0:
+            bigger = [s for s in CODE_FONT_SIZES if s > current]
+            if bigger:
+                self.choose_font_size(bigger[0])
+        else:
+            smaller = [s for s in CODE_FONT_SIZES if s < current]
+            if smaller:
+                self.choose_font_size(smaller[-1])
 
     def choose_theme(self, name):
         if name == theme_name():
@@ -629,6 +759,9 @@ class MainWindow(QMainWindow):
                     e.ignore()
                     return
         self.shutdown_threads()
+        if self.recovery is not None:
+            self.autosave_timer.stop()
+            self.recovery.close()
         e.accept()
 
     def shutdown_threads(self, timeout=5.0):
@@ -806,7 +939,7 @@ class MainWindow(QMainWindow):
     def about(self):
         msg = QMessageBox(self)
         msg.setWindowTitle("About HadaraLab")
-        msg.setIconPixmap(QPixmap(asset("logo_256.png")).scaled(
+        msg.setIconPixmap(QPixmap(asset("app_icon_256.png")).scaled(
             96, 96, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation))
         msg.setTextFormat(Qt.TextFormat.RichText)
         msg.setText(themed(
@@ -814,18 +947,20 @@ class MainWindow(QMainWindow):
             "<div dir='rtl' style='font-size:10.5pt; line-height:150%'>"
             "برنامج <b>مفتوح المصدر</b> تابع إلى <b>كلية الحضارة الجامعة</b><br>"
             "<b>قسم هندسة تقنيات الحاسوب</b><br><br>"
-            "برمجة وإعداد الطالب: <b>محمد عبدالرحمن محمود</b><br>"
+            "برمجة وإعداد: <b>محمد عبدالرحمن محمود</b><br>"
             "الرخصة: <b>MIT</b> (رخصة مصادر مفتوحة)<br>"
+            "الشيفرة المصدرية: <a href='https://github.com/dvlinuxx-max/HadaraLab'>github.com/dvlinuxx-max/HadaraLab</a><br>"
             "الموقع الإلكتروني: <a href='https://mohmadev.com/'>mohmadev.com</a><br>"
             "البريد الإلكتروني للدعم: <a href='mailto:support@mohmadev.com'>support@mohmadev.com</a><br><br>"
             "<span style='color:#4A5B73'>لا يجمع البرنامج أي بيانات ولا يتصل بالإنترنت.<br>"
-            "شعار الكلية واسمها ملكٌ لكلية الحضارة الجامعة، ويُستخدمان لهذا المشروع البرمجي فقط.</span>"
+            "اسم الكلية ملكٌ لكلية الحضارة الجامعة، ويُستخدم لهذا المشروع البرمجي فقط.</span>"
             "</div><hr>"
             "<div style='font-size:9.5pt; color:#4A5B73'>"
             "Open-source software of <b>Al-Hadara University College</b><br>"
             "Department of Computer Techniques Engineering<br>"
             "Developed by: <b>محمد عبدالرحمن محمود</b><br>"
-            "License: MIT License (the college logo and name are excluded)<br>"
+            "License: MIT License (the college name is excluded)<br>"
+            "Source code: <a href='https://github.com/dvlinuxx-max/HadaraLab'>https://github.com/dvlinuxx-max/HadaraLab</a><br>"
             "Website: <a href='https://mohmadev.com/'>https://mohmadev.com/</a><br>"
             "Support: <a href='mailto:support@mohmadev.com'>support@mohmadev.com</a>"
             "</div>"))

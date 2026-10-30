@@ -7,7 +7,7 @@ from PySide6.QtGui import (QColor, QFont, QPainter, QSyntaxHighlighter,
                            QTextCharFormat, QTextCursor, QTextFormat)
 from PySide6.QtWidgets import QCompleter, QPlainTextEdit, QTextEdit, QWidget
 
-from .theme import C, CODE_FONT, set_css, qc, themed
+from .theme import C, code_font_css, code_font_size, set_css, qc, themed
 from ..engine.lexer import KEYWORDS
 
 
@@ -110,17 +110,12 @@ class LineNumberArea(QWidget):
 class CodeEditor(QPlainTextEdit):
     run_selection = Signal(str)
     modified_changed = Signal(bool)
+    zoom = Signal(int)                 # Ctrl + mouse wheel: +1 bigger, -1 smaller
 
     def __init__(self, builtin_names=(), parent=None):
         super().__init__(parent)
-        font = QFont()
-        font.setFamilies([f.strip() for f in CODE_FONT.split(",")])
-        font.setPointSize(11)
-        font.setStyleHint(QFont.StyleHint.Monospace)
-        self.setFont(font)
-        self.setTabStopDistance(4 * self.fontMetrics().horizontalAdvance(" "))
         self.setLineWrapMode(QPlainTextEdit.LineWrapMode.NoWrap)
-        set_css(self, "QPlainTextEdit { border: none; border-radius: 0; padding-left: 4px; }")
+        self._apply_font(code_font_size())
         self.error_line = None
         self.highlighter = MatlabHighlighter(self.document(), builtin_names)
         self.numbers = LineNumberArea(self)
@@ -140,13 +135,33 @@ class CodeEditor(QPlainTextEdit):
         self.completer.activated.connect(self._insert_completion)
         set_css(self.completer.popup(), 
             f"QListView {{ background: white; border: 1px solid {C['border']}; border-radius: 6px;"
-            f" font-family: Consolas; font-size: 10pt; }}"
+            f" font-family: 'JetBrains Mono', Consolas; font-size: 10pt; }}"
             f"QListView::item:selected {{ background: {C['select']}; color: {C['text']}; }}")
 
     # -- line numbers --------------------------------------------------------
     def line_number_width(self):
         digits = max(3, len(str(self.blockCount())))
         return 18 + self.fontMetrics().horizontalAdvance("9") * digits
+
+    def wheelEvent(self, e):
+        if e.modifiers() & Qt.KeyboardModifier.ControlModifier:
+            step = e.angleDelta().y()
+            if step:
+                self.zoom.emit(1 if step > 0 else -1)
+            e.accept()
+            return
+        super().wheelEvent(e)
+
+    def _apply_font(self, size):
+        set_css(self, "QPlainTextEdit { border: none; border-radius: 0; padding-left: 4px; "
+                      f"{code_font_css(size)} }}")
+        self.ensurePolished()
+        self.setTabStopDistance(4 * self.fontMetrics().horizontalAdvance(" "))
+
+    def set_font_size(self, size):
+        self._apply_font(size)
+        self._update_margin()
+        self.numbers.update()
 
     def _update_margin(self, *_):
         self.setViewportMargins(self.line_number_width(), 0, 0, 0)

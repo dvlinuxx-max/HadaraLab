@@ -5,15 +5,9 @@ from PySide6.QtGui import QColor, QFont, QTextCharFormat, QTextCursor
 from PySide6.QtWidgets import (QHBoxLayout, QLabel, QLineEdit, QPlainTextEdit,
                                QVBoxLayout, QWidget)
 
-from .theme import C, CODE_FONT, set_css, qc, themed
+from .theme import C, code_font_css, code_font_size, set_css, qc, themed
 
 
-def _code_font(size=10):
-    f = QFont()
-    f.setFamilies([x.strip() for x in CODE_FONT.split(",")])
-    f.setPointSize(size)
-    f.setStyleHint(QFont.StyleHint.Monospace)
-    return f
 
 
 class CommandInput(QLineEdit):
@@ -33,6 +27,11 @@ class CommandInput(QLineEdit):
 class CommandWindow(QWidget):
     command = Signal(str)
 
+    def set_font_size(self, size):
+        set_css(self.log, f"QPlainTextEdit {{ border-radius: 8px; padding: 6px; {code_font_css(size - 1)} }}")
+        set_css(self.input, f"QLineEdit {{ {code_font_css(size - 1)} }}")
+        set_css(self.prompt, f"color: {C['primary']}; font-weight: 700; {code_font_css(size)}")
+
     def __init__(self, parent=None):
         super().__init__(parent)
         self.history = []
@@ -43,20 +42,16 @@ class CommandWindow(QWidget):
 
         self.log = QPlainTextEdit()
         self.log.setReadOnly(True)
-        self.log.setFont(_code_font(10))
         self.log.setMaximumBlockCount(20000)
-        set_css(self.log, "QPlainTextEdit { border-radius: 8px; padding: 6px; }")
         lay.addWidget(self.log, 1)
 
         row = QHBoxLayout()
         row.setSpacing(6)
-        prompt = QLabel(">>")
-        prompt.setFont(_code_font(11))
-        set_css(prompt, f"color: {C['primary']}; font-weight: 700;")
+        self.prompt = prompt = QLabel(">>")
         self.input = CommandInput()
-        self.input.setFont(_code_font(10))
         self.input.setPlaceholderText("Type a command    (Up / Down = history)")
         self.input.returnPressed.connect(self._submit)
+        self.set_font_size(code_font_size())
         self.input.history_up.connect(lambda: self._walk(-1))
         self.input.history_down.connect(lambda: self._walk(1))
         row.addWidget(prompt)

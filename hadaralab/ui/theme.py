@@ -135,12 +135,36 @@ C = {
     "red": "#E53935",
     "select": "#D6EAFE",
     "current_line": "#F2F8FF",
-    "header_a": "#1E88E5",
-    "header_b": "#00BFA5",
+    "header_a": "#1F388C",      # brand indigo (was #1E88E5)
+    "header_b": "#2E8C80",      # brand teal (was #00BFA5)
 }
 
-CODE_FONT = "Cascadia Mono, Consolas, Courier New"
+CODE_FONT = "JetBrains Mono, Cascadia Mono, Consolas, Courier New"
 UI_FONT = "Segoe UI"
+CODE_FONT_SIZES = (9, 10, 11, 12, 13, 14, 16, 18)
+DEFAULT_CODE_FONT_SIZE = 11
+
+
+def code_font_size():
+    """Editor font size chosen in Settings (the Command Window uses one point less)."""
+    from PySide6.QtCore import QSettings
+    try:
+        size = int(QSettings("Hadara", "HadaraLab").value("code_font_size", DEFAULT_CODE_FONT_SIZE))
+    except (TypeError, ValueError):
+        size = DEFAULT_CODE_FONT_SIZE
+    return min(max(size, 8), 24)
+
+
+def code_font_css(size):
+    """Font rule for code widgets. A widget's own style sheet is needed because the
+    application-wide '* { font-family; font-size }' rule would override setFont()."""
+    families = ", ".join(f"'{f.strip()}'" for f in CODE_FONT.split(","))
+    return f"font-family: {families}, monospace; font-size: {size}pt;"
+
+
+def save_code_font_size(size):
+    from PySide6.QtCore import QSettings
+    QSettings("Hadara", "HadaraLab").setValue("code_font_size", int(size))
 
 
 def asset(name):

@@ -23,20 +23,26 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 -------------------------------------------------------------------------------
-Exception: college logo and name
+Exception: college name
 -------------------------------------------------------------------------------
 
-The MIT License above covers the source code only. It does NOT cover the logo
-and name of Al-Hadara University College (files assets/logo.png,
-assets/logo_256.png and assets/logo.ico, and the college name in the user
-interface). They belong to Al-Hadara University College and are used solely
-for this software project. They may not be used, copied, modified or
-distributed outside this project without prior permission from the college.
-Anyone reusing the source code in another project must remove them.
+The MIT License above covers the source code only. It does NOT cover the name
+of Al-Hadara University College shown in the user interface. The name belongs
+to Al-Hadara University College and is used solely for this software project.
+It may not be used outside this project without prior permission from the
+college. Anyone reusing the source code in another project must remove it.
 
-استثناء: شعار الكلية واسمها
-تشمل رخصة MIT أعلاه الشيفرة المصدرية فقط، ولا تشمل شعار كلية الحضارة الجامعة
-ولا اسمها، فهما ملكٌ للكلية ويُستخدمان لأغراض هذا المشروع البرمجي فقط، ولا يجوز
-استخدامهما أو نسخهما أو تعديلهما أو توزيعهما خارج هذا المشروع إلا بإذن مسبق من الكلية.
+استثناء: اسم الكلية
+تشمل رخصة MIT أعلاه الشيفرة المصدرية فقط، ولا تشمل اسم كلية الحضارة الجامعة
+الظاهر في واجهة البرنامج، فهو ملكٌ للكلية ويُستخدم لأغراض هذا المشروع البرمجي فقط،
+ولا يجوز استخدامه خارج هذا المشروع إلا بإذن مسبق من الكلية.
+
+Bundled font
+The JetBrains Mono font files in assets/fonts are Copyright 2020 The JetBrains
+Mono Project Authors and are licensed under the SIL Open Font License 1.1
+(assets/fonts/OFL.txt), not under the MIT License above.
+
+الخط المضمَّن: ملفات خط JetBrains Mono في المجلد assets/fonts مرخّصة برخصة
+SIL Open Font License 1.1 (الملف assets/fonts/OFL.txt) وليس برخصة MIT.
 
 See PRIVACY.md for the privacy policy.
