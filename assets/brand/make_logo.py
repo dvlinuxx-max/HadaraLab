@@ -1,8 +1,7 @@
 """Build the HadaraLab icon files from the designer's artwork (run: python assets/brand/make_logo.py).
 
 Icon and visual identity by Ahmed Al Basri (instagram.com/dcssi_, github.com/ahmedalbasr).
-The source files
-in assets/brand/source are his exports, used as they are:
+The source files in assets/brand/source are his exports, used as they are:
 
     icon_blue.png    1024 x 1024 app icon: navy background, blue column
     glyph_white.png  the white column on a transparent background
