@@ -77,6 +77,14 @@ margin(G)
 python tests/test_engine.py
 ```
 
+## بناء حزمة المتجر
+
+```powershell
+powershell -ExecutionPolicy Bypass -File build_store.ps1
+```
+
+يشغّل الاختبارات ويبني البرنامج ثم ينشئ الملف `store\HadaraLab_<version>_x64.msix`. يحتاج إلى Windows SDK.
+
 ## الفريق
 
 - **محمد عبدالرحمن محمود**: البرمجة ([@devlopxx](https://www.instagram.com/devlopxx/))

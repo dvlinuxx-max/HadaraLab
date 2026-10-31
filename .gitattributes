@@ -1,0 +1,3 @@
+# .m files are MATLAB scripts (not Objective-C), and the examples are real code
+*.m linguist-language=MATLAB
+examples/** linguist-documentation=false
