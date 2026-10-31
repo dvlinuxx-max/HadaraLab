@@ -1,61 +1,65 @@
-"""Source of the HadaraLab logo SVGs (run: python assets/brand/make_logo.py).
+"""Build the HadaraLab icon files from the designer's artwork (run: python assets/brand/make_logo.py).
 
-The mark, in a 100x100 box: a Mesopotamian arch with a stepped (ziggurat) crown, and a
-second-order step response inside it - it rises, overshoots once, then settles.
+Icon and visual identity by Ahmed Al Basri (instagram.com/dcssi_). The source files
+in assets/brand/source are his exports, used as they are:
+
+    icon_blue.png    1024 x 1024 app icon: navy background, blue column
+    glyph_white.png  the white column on a transparent background
+    glyph_blue.png   the blue column on a transparent background
+
+The app icon is the designer's background with the white column placed exactly where
+his blue column is. Brand colors: navy #020A21, blue #528CF1, mint #7DD3B0.
 """
 import os
 
+from PIL import Image, ImageFilter
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 ASSETS = os.path.dirname(HERE)
+SRC = os.path.join(HERE, "source")
+NAVY = (2, 10, 33)
+GLYPH_BOX = (328, 278, 697, 747)      # the blue column in icon_blue.png (left, top, right, bottom)
 
-ARCH = ("M 8 88 V 50 A 24 26 0 0 1 32 24 V 17 H 41 V 9 H 59 V 17 H 68 V 24 "
-        "A 24 26 0 0 1 92 50 V 88")
-CURVE = "M 16 85 H 20 C 27 85 30 41 39 41 C 46 41 50 61 61 61 H 83"
-INDIGO, TEAL = "#1F388C", "#2E8C80"
+bg = Image.open(os.path.join(SRC, "icon_blue.png")).convert("RGBA")
+glyph = Image.open(os.path.join(SRC, "glyph_white.png")).convert("RGBA")
 
+# take the blue column out of the background: anything that is not navy around it becomes navy
+mask = Image.new("L", bg.size, 0)
+px, mp = bg.load(), mask.load()
+l, t, r, b = GLYPH_BOX
+for y in range(t - 6, b + 6):
+    for x in range(l - 6, r + 6):
+        if sum(abs(c - n) for c, n in zip(px[x, y][:3], NAVY)) > 12:
+            mp[x, y] = 255
+mask = mask.filter(ImageFilter.MaxFilter(5))        # cover the anti-aliased edge too
+bg.paste(Image.new("RGBA", bg.size, NAVY + (255,)), (0, 0), mask)
 
-def mark(stroke, sw):
-    return (f'<path d="{ARCH}" fill="none" stroke="{stroke}" stroke-width="{sw}" stroke-linejoin="miter"/>\n'
-            f'    <path d="{CURVE}" fill="none" stroke="{stroke}" stroke-width="{sw}" stroke-linejoin="round"/>')
+# the white column, same place and size as the blue one
+w, h = r - l, b - t
+icon = bg.copy()
+icon.alpha_composite(glyph.resize((w, h), Image.LANCZOS), (l, t))
 
+icon.save(os.path.join(HERE, "app_icon_1024.png"))
+icon.resize((256, 256), Image.LANCZOS).save(os.path.join(ASSETS, "app_icon_256.png"))
+sizes = [256, 128, 64, 48, 40, 32, 24, 20, 16]
+icon.resize((256, 256), Image.LANCZOS).save(
+    os.path.join(ASSETS, "app_icon.ico"), format="ICO", sizes=[(s, s) for s in sizes])
 
-def tile(sw, scale):
-    """Rounded app tile with the white mark (scale < 1 leaves padding)."""
-    tx, ty = 50 - 50 * scale, 51 - 48.5 * scale
-    return f'''<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 100 100">
-  <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="{INDIGO}"/><stop offset="1" stop-color="{TEAL}"/>
-    </linearGradient>
-  </defs>
-  <rect x="2" y="2" width="96" height="96" rx="20" fill="url(#g)"/>
-  <g transform="translate({tx:.2f} {ty:.2f}) scale({scale})">
-    {mark("#FFFFFF", sw)}
-  </g>
-</svg>
-'''
+# the white column alone, for the navy header and the splash screen
+mark = glyph.copy()
+mark.thumbnail((512, 512), Image.LANCZOS)
+mark.save(os.path.join(HERE, "logo_mark_white.png"))
 
+# the white column as the small icon of the window title bar (next to minimise / close)
+square = Image.new("RGBA", (256, 256), (0, 0, 0, 0))
+col = glyph.copy()
+col.thumbnail((256, 256), Image.LANCZOS)
+square.alpha_composite(col, ((256 - col.width) // 2, (256 - col.height) // 2))
+square.save(os.path.join(HERE, "titlebar_icon.ico"), format="ICO",
+            sizes=[(s, s) for s in (16, 20, 24, 32, 40, 48, 64)])
 
-def mark_only(sw=7.2):
-    return f'''<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 100 100">
-  <defs>
-    <linearGradient id="g" gradientUnits="userSpaceOnUse" x1="4" y1="10" x2="96" y2="90">
-      <stop offset="0" stop-color="{INDIGO}"/><stop offset="1" stop-color="{TEAL}"/>
-    </linearGradient>
-  </defs>
-  <g transform="translate(0 2)">
-    {mark("url(#g)", sw)}
-  </g>
-</svg>
-'''
-
-
-def write(name, text):
-    with open(os.path.join(ASSETS, name), "w", encoding="utf-8") as fh:
-        fh.write(text)
-
-
-write("app_icon.svg", tile(7.6, 0.74))           # large sizes (48 px and up)
-write("app_icon_small.svg", tile(10.5, 0.78))    # 16-32 px: thicker lines stay readable
-write("brand/logo_mark.svg", mark_only())
-print("logo SVGs written")
+# the blue column alone, next to the name on the start page
+blue = Image.open(os.path.join(SRC, "glyph_blue.png")).convert("RGBA")
+blue.thumbnail((512, 512), Image.LANCZOS)
+blue.save(os.path.join(HERE, "logo_mark_blue.png"))
+print("icons written")

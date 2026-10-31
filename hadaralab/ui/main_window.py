@@ -52,16 +52,16 @@ PRIVACY_HTML = """
 <li><b>حذف البيانات:</b> يكفي حذف مجلد البرنامج والمجلدين Documents\\HadaraLab
 و%LOCALAPPDATA%\\HadaraLab ومفتاح السجل HKEY_CURRENT_USER\\Software\\Hadara\\HadaraLab.</li>
 </ol>
-<h2 style='color:#1565C0'>إشعار بشأن اسم الكلية</h2>
-<ul>
-<li><b>اسم كلية الحضارة الجامعة</b> ملكٌ لكلية الحضارة الجامعة.</li>
-<li>يُستخدم الاسم في هذا البرنامج <b>لأغراض هذا المشروع البرمجي فقط</b>،
-بوصفه مشروعاً تابعاً لقسم هندسة تقنيات الحاسوب في الكلية.</li>
-<li><b>لا تشمل رخصة MIT</b> الخاصة بالشيفرة المصدرية اسمَ الكلية.</li>
-<li>لا يجوز استخدام الاسم خارج هذا المشروع إلا بإذن مسبق من كلية الحضارة الجامعة.</li>
-</ul>
 <p>للتواصل: <a href='mailto:support@mohmadev.com'>support@mohmadev.com</a> —
 <a href='https://mohmadev.com/'>mohmadev.com</a></p>
+<h2 style='color:#1565C0'>حقوق تصميم الأيقونة والهوية البصرية</h2>
+<ul>
+<li>صمَّم أيقونة البرنامج وهويته البصرية (الشعار والألوان) <b>أحمد البصري</b>
+(<a href='https://www.instagram.com/dcssi_/'>&#x200E;@dcssi_</a>).</li>
+<li>حقوق التصميم محفوظة للمصمم، ويُستخدم التصميم في هذا البرنامج بإذنه.</li>
+<li><b>لا تشمل رخصة MIT</b> الخاصة بالشيفرة المصدرية الأيقونةَ ولا الشعار.</li>
+<li>لا يجوز استخدام الأيقونة أو الشعار خارج هذا المشروع إلا بإذن مسبق من المصمم.</li>
+</ul>
 </div>
 <hr>
 <div style='font-size:9.5pt; color:#4A5B73'>
@@ -72,10 +72,11 @@ figures stay where you save them (default folder: Documents\\HadaraLab). Only th
 size are stored, locally in the Windows registry. Unsaved scripts are copied every few seconds to
 %LOCALAPPDATA%\\HadaraLab\\recovery (on your computer only) and deleted when HadaraLab closes
 normally. Links open only when you click them.</p>
-<h3>College name notice</h3>
-<p>The name of Al-Hadara University College belongs to the college and is used solely for this
-software project. It is not covered by the MIT License of the source code and may not be used
-outside this project without the college's prior permission.</p>
+<h3>Icon and visual identity</h3>
+<p>The app icon and visual identity (logo and colors) were designed by Ahmed Al Basri
+(<a href='https://www.instagram.com/dcssi_/'>instagram.com/dcssi_</a>). The design rights belong to the
+designer, and the design is used in this program with his permission. The icon and logo may not be used
+outside this project without the designer's prior permission.</p>
 </div>
 """
 
@@ -166,26 +167,26 @@ class StartPage(QScrollArea):
         lay.setSpacing(14)
 
         hero = QHBoxLayout()
-        logo = QLabel()
-        logo.setPixmap(QPixmap(asset("app_icon_256.png")).scaled(
-            110, 110, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation))
+        logo = QLabel()          # the designer's blue column, next to the name and version
+        logo.setPixmap(QPixmap(asset("brand/logo_mark_blue.png")).scaled(
+            110, 96, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation))
         hero.addWidget(logo)
+        hero.addSpacing(10)
         txt = QLabel(themed(
-            f"<div style='font-size:24pt; font-weight:800; color:{C['primary_dark']}'>HadaraLab"
-            f"<span style='font-size:11pt; color:{C['teal']}; font-weight:600'>  v{__version__}</span></div>"))
+            f"<div style='font-size:24pt; font-weight:800; color:{C['primary_dark']}'>HadaraLab</div>"))
         txt.setWordWrap(True)
         hero.addWidget(txt, 1)
         lay.addLayout(hero)
 
         grid = QGridLayout()
         grid.setSpacing(12)
-        cards = [
+        cards = [      # brand colors: blue for files, mint for the control tools
             ("New Script", "نص برمجي جديد  (Ctrl+N)", C["primary"], win.new_tab),
-            ("Open File", "فتح ملف .m  (Ctrl+O)", C["teal"], win.open_file),
-            ("PID Tuner", "ضبط متحكم PID تفاعلياً", C["purple"], win.open_pid),
-            ("Routh Table", "فحص الاستقرارية بمعيار راوث", C["orange"], win.open_routh),
-            ("Block Diagram", "تبسيط المخططات الصندوقية", C["pink"], win.open_blocks),
-            ("Function Help", "قائمة الدوال المتاحة", C["green"], win.show_functions),
+            ("Open File", "فتح ملف .m  (Ctrl+O)", C["primary"], win.open_file),
+            ("Function Help", "قائمة الدوال المتاحة", C["primary"], win.show_functions),
+            ("PID Tuner", "ضبط متحكم PID تفاعلياً", C["teal"], win.open_pid),
+            ("Routh Table", "فحص الاستقرارية بمعيار راوث", C["teal"], win.open_routh),
+            ("Block Diagram", "تبسيط المخططات الصندوقية", C["teal"], win.open_blocks),
         ]
         for i, (t, s, col, slot) in enumerate(cards):
             grid.addWidget(_card_button(t, s, col, slot), i // 3, i % 3)
@@ -201,6 +202,32 @@ class StartPage(QScrollArea):
         lay.addStretch(1)
 
 
+def _style_title_bar(win):
+    """Windows only: a dark title bar showing the white column of the brand.
+
+    The taskbar keeps the full app icon; only the small title-bar icon (next to the
+    minimise / close buttons) is the white column, which needs the dark title bar.
+    """
+    if sys.platform != "win32":
+        return
+    try:
+        import ctypes
+        hwnd = int(win.winId())
+        on = ctypes.c_int(1)
+        # DWMWA_USE_IMMERSIVE_DARK_MODE: 20 on Windows 10 20H1 and later, 19 before that
+        if ctypes.windll.dwmapi.DwmSetWindowAttribute(hwnd, 20, ctypes.byref(on), 4) != 0:
+            ctypes.windll.dwmapi.DwmSetWindowAttribute(hwnd, 19, ctypes.byref(on), 4)
+        user32 = ctypes.windll.user32
+        user32.LoadImageW.restype = ctypes.c_void_p
+        size = user32.GetSystemMetrics(49)                     # SM_CXSMICON
+        hicon = user32.LoadImageW(None, asset("brand/titlebar_icon.ico"), 1, size, size, 0x10)
+        if hicon:
+            user32.SendMessageW.argtypes = [ctypes.c_void_p, ctypes.c_uint, ctypes.c_void_p, ctypes.c_void_p]
+            user32.SendMessageW(hwnd, 0x80, 0, hicon)          # WM_SETICON, ICON_SMALL
+    except (OSError, AttributeError):
+        pass
+
+
 # ---------------------------------------------------------------------------
 # main window
 # ---------------------------------------------------------------------------
@@ -210,6 +237,7 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.setWindowTitle("HadaraLab")
         self.setWindowIcon(QIcon(asset("app_icon.ico")))
+        _style_title_bar(self)
         self.resize(1500, 920)
         self.untitled_count = 0
         self.running = False
@@ -320,9 +348,9 @@ class MainWindow(QMainWindow):
         lay = QHBoxLayout(header)
         lay.setContentsMargins(14, 6, 14, 6)
         lay.setSpacing(8)
-        logo = QLabel()
-        logo.setPixmap(QPixmap(asset("app_icon_256.png")).scaled(
-            48, 48, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation))
+        logo = QLabel()          # the column alone on the navy header, as in the brand file
+        logo.setPixmap(QPixmap(asset("brand/logo_mark_white.png")).scaled(
+            42, 42, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation))
         lay.addWidget(logo)
         titles = QVBoxLayout()
         titles.setSpacing(0)
@@ -945,21 +973,26 @@ class MainWindow(QMainWindow):
         msg.setText(themed(
             f"<h2 style='color:#1565C0; margin-bottom:2px'>HadaraLab {__version__}</h2>"
             "<div dir='rtl' style='font-size:10.5pt; line-height:150%'>"
-            "برنامج <b>مفتوح المصدر</b> تابع إلى <b>كلية الحضارة الجامعة</b><br>"
-            "<b>قسم هندسة تقنيات الحاسوب</b><br><br>"
-            "برمجة وإعداد: <b>محمد عبدالرحمن محمود</b><br>"
+            "برنامج <b>مفتوح المصدر</b> لمادة <b>أسس هندسة السيطرة</b><br><br>"
+            "برمجة وإعداد: <b>محمد عبدالرحمن محمود</b> "
+            "(<a href='https://www.instagram.com/devlopxx/'>&#x200E;@devlopxx</a>)<br>"
+            "المساهمة: <b>فراس لطيف</b> (<a href='https://github.com/firaslteef'>github.com/firaslteef</a>)<br>"
+            "تصميم الأيقونة والهوية البصرية: <b>أحمد البصري</b> "
+            "(<a href='https://www.instagram.com/dcssi_/'>&#x200E;@dcssi_</a>)<br>"
             "الرخصة: <b>MIT</b> (رخصة مصادر مفتوحة)<br>"
             "الشيفرة المصدرية: <a href='https://github.com/dvlinuxx-max/HadaraLab'>github.com/dvlinuxx-max/HadaraLab</a><br>"
             "الموقع الإلكتروني: <a href='https://mohmadev.com/'>mohmadev.com</a><br>"
             "البريد الإلكتروني للدعم: <a href='mailto:support@mohmadev.com'>support@mohmadev.com</a><br><br>"
-            "<span style='color:#4A5B73'>لا يجمع البرنامج أي بيانات ولا يتصل بالإنترنت.<br>"
-            "اسم الكلية ملكٌ لكلية الحضارة الجامعة، ويُستخدم لهذا المشروع البرمجي فقط.</span>"
+            "<span style='color:#4A5B73'>لا يجمع البرنامج أي بيانات ولا يتصل بالإنترنت.</span>"
             "</div><hr>"
             "<div style='font-size:9.5pt; color:#4A5B73'>"
-            "Open-source software of <b>Al-Hadara University College</b><br>"
-            "Department of Computer Techniques Engineering<br>"
-            "Developed by: <b>محمد عبدالرحمن محمود</b><br>"
-            "License: MIT License (the college name is excluded)<br>"
+            "Open-source software for <b>Control Engineering Fundamentals</b><br>"
+            "Developed by: <b>Mohammed Abd Alrahman</b> "
+            "(<a href='https://www.instagram.com/devlopxx/'>instagram.com/devlopxx</a>)<br>"
+            "Contributor: <b>Firas Lateef</b> (<a href='https://github.com/firaslteef'>github.com/firaslteef</a>)<br>"
+            "Icon and visual identity: <b>Ahmed Al Basri</b> "
+            "(<a href='https://www.instagram.com/dcssi_/'>instagram.com/dcssi_</a>)<br>"
+            "License: MIT License<br>"
             "Source code: <a href='https://github.com/dvlinuxx-max/HadaraLab'>https://github.com/dvlinuxx-max/HadaraLab</a><br>"
             "Website: <a href='https://mohmadev.com/'>https://mohmadev.com/</a><br>"
             "Support: <a href='mailto:support@mohmadev.com'>support@mohmadev.com</a>"

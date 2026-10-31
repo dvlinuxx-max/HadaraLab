@@ -4,9 +4,11 @@ The UI is written with the light colors below. In dark mode every light color
 is translated through DARK_MAP (Qt style sheets, QColors and matplotlib
 artists alike), so the same widgets render in either theme.
 
-The dark theme is a neutral graphite palette in the spirit of JetBrains'
-New UI and VS Code Dark Modern: dark gray instead of pure black, lighter
-surfaces for raised elements, muted accents, and Dark+ syntax colors.
+The dark theme follows Visual Studio Code's Dark Modern: neutral grays (#181818
+window, #1F1F1F panels), #2B2B2B borders, the #0078D4 accent, #264F78 selection
+and Dark+ syntax colors. The light theme uses the HadaraLab brand (design by
+Ahmed Al Basri: navy #020A21, blue #528CF1, mint #7DD3B0), and the brand navy
+stays in the splash screen and the header of the light theme.
 """
 
 import os
@@ -16,37 +18,40 @@ ASSETS = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.ab
 
 # named dark-theme colors (also used directly by plots, icons and the splash)
 DARK_UI = {
-    "window": "#1E1F22",      # app background
-    "surface": "#2B2D30",     # panels, inputs, plot background
-    "raised": "#313337",      # hover / raised controls
-    "border": "#393B40",
-    "text": "#DFE1E5",
-    "text2": "#B4B8BF",
-    "muted": "#8C9098",
-    "grid": "#35373C",
-    "spine": "#4E5157",
-    "accent": "#3574F0",
+    "window": "#181818",      # app background, title and status bars (VS Code Dark Modern)
+    "surface": "#1F1F1F",     # editor, panels, inputs, plot background
+    "raised": "#2A2D2E",      # hover / raised controls
+    "border": "#2B2B2B",
+    "text": "#CCCCCC",
+    "text2": "#B4B4B4",
+    "muted": "#9D9D9D",
+    "grid": "#2E2E2E",
+    "spine": "#4F4F4F",
+    "accent": "#0078D4",
 }
 
 # light color -> dark color
 DARK_MAP = {
     # surfaces (darkest = window, lighter = raised)
-    "#FFFFFF": "#2B2D30", "WHITE": "#2B2D30", "#F3F7FC": "#1E1F22", "#F3F8FF": "#26282C",
-    "#F5F9FE": "#232427", "#F5FAFF": "#313337", "#F2F8FF": "#26282E", "#EEF4FB": "#2F3134",
-    "#EEF3F9": "#303236", "#E8F0FA": "#232427", "#E8F1FD": "#393B40", "#D6E8FD": "#43454A",
-    "#D6EAFE": "#2E436E", "#E3ECF7": "#3C3E43", "#E3EBF5": "#35373C", "#DCE6F2": "#393B40",
-    "#C9D7E8": "#4A4C51", "#9FB7D3": "#5E6167", "#B8C7D9": "#4E5157",
+    "#FFFFFF": "#1F1F1F", "WHITE": "#1F1F1F", "#F3F7FC": "#181818", "#F3F8FF": "#202020",
+    "#F5F9FE": "#1B1B1B", "#F5FAFF": "#2A2D2E", "#F2F8FF": "#262626", "#EEF4FB": "#252526",
+    "#EEF3F9": "#2B2B2B", "#E8F0FA": "#181818", "#E8F1FD": "#313131", "#D6E8FD": "#3C3C3C",
+    "#D6EAFE": "#264F78", "#E3ECF7": "#3C3C3C", "#E3EBF5": "#2E2E2E", "#DCE6F2": "#2B2B2B",
+    "#C9D7E8": "#424242", "#9FB7D3": "#4F4F4F", "#B8C7D9": "#4A4A4A",
     # status backgrounds and borders (muted tints)
     "#FFFDE7": "#3A3524", "#FFF6E5": "#38301F", "#FDECEF": "#3B2427", "#FFF0F3": "#3A2427",
     "#FFE3E8": "#4A2A2E", "#E8F8F0": "#21322A", "#FFCC80": "#6B5530", "#F48FB1": "#6B3A40",
     "#A5D6A7": "#355E44", "#CDE8CF": "#355E44", "#F4FBF4": "#21322A", "#E8F6E9": "#263A2F",
-    "#F8FBFF": "#2B2D30", "#EEF6FF": "#313337",
+    "#F8FBFF": "#1F1F1F", "#EEF6FF": "#2A2D2E",
     # text
-    "#24324A": "#DFE1E5", "#4A5B73": "#B4B8BF", "#6B7C93": "#8C9098", "#6C8299": "#8C9098",
-    "#7A8BA3": "#868A91", "#8A9AB0": "#868A91", "#9AA8BA": "#7A7E85", "#9AAAC0": "#6F737A",
-    "#9FB3C8": "#55585E", "#212121": "#DFE1E5", "#000000": "#DFE1E5",
-    # accents (desaturated) - blue, teal, orange, pink, purple, green, red
-    "#1E88E5": "#4A86F0", "#2196F3": "#5C93F2", "#00BFA5": "#3FB8A2", "#1DE9B6": "#55C7B2",
+    "#24324A": "#CCCCCC", "#4A5B73": "#B4B4B4", "#6B7C93": "#9D9D9D", "#6C8299": "#9D9D9D",
+    "#7A8BA3": "#8B8B8B", "#8A9AB0": "#8B8B8B", "#9AA8BA": "#7A7A7A", "#9AAAC0": "#6E6E6E",
+    "#9FB3C8": "#5A5A5A", "#212121": "#CCCCCC", "#000000": "#CCCCCC",
+    # light-theme brand accents -> VS Code accents (button blue, link blue, Dark+ teal)
+    "#3E7BE8": "#0078D4", "#528CF1": "#026EC1", "#2A5BC4": "#4DAAFC", "#2A9D74": "#4EC9B0",
+    "#CDEFE0": "#2D4A40",
+    # other accents (desaturated) - blue, teal, orange, pink, purple, green, red
+    "#1E88E5": "#3794FF", "#2196F3": "#4DAAFC", "#00BFA5": "#4EC9B0", "#1DE9B6": "#6FD6C2",
     "#FF8F00": "#D9822B", "#FFA000": "#E8963A", "#FF6D00": "#E8913A", "#E65100": "#E2A04A",
     "#E91E63": "#E0679A", "#C62828": "#EF7A80", "#E53935": "#E5534B", "#F4511E": "#E5734B",
     "#7C4DFF": "#9D7CD8", "#43A047": "#6AAB73", "#00ACC1": "#56B6C2", "#FFB300": "#E5C07B",
@@ -101,6 +106,16 @@ def load_saved_theme():
     return theme_name()
 
 
+def apply_link_colors(app):
+    """Readable link colors in rich text (About, Privacy): Qt's default light blue is too pale."""
+    from PySide6.QtGui import QColor, QPalette
+    pal = app.palette()
+    color = QColor("#4DAAFC" if is_dark() else "#2A5BC4")
+    pal.setColor(QPalette.ColorRole.Link, color)
+    pal.setColor(QPalette.ColorRole.LinkVisited, color)
+    app.setPalette(pal)
+
+
 def save_theme(name):
     from PySide6.QtCore import QSettings
     QSettings("Hadara", "HadaraLab").setValue("theme", name)
@@ -125,9 +140,11 @@ C = {
     "border": "#DCE6F2",
     "text": "#24324A",
     "muted": "#6B7C93",
-    "primary": "#1E88E5",
-    "primary_dark": "#1565C0",
-    "teal": "#00BFA5",
+    "primary": "#3E7BE8",       # brand blue, a shade deeper so white text stays readable
+    "primary_dark": "#2A5BC4",
+    "teal": "#2A9D74",          # brand mint, deeper shade for text and fills on white
+    "mint": "#7DD3B0",          # brand mint
+    "navy": "#020A21",          # brand navy
     "orange": "#FF8F00",
     "pink": "#E91E63",
     "purple": "#7C4DFF",
@@ -135,8 +152,8 @@ C = {
     "red": "#E53935",
     "select": "#D6EAFE",
     "current_line": "#F2F8FF",
-    "header_a": "#1F388C",      # brand indigo (was #1E88E5)
-    "header_b": "#2E8C80",      # brand teal (was #00BFA5)
+    "header_a": "#020A21",      # brand navy (earlier: #1F388C, first: #1E88E5)
+    "header_b": "#1C3F86",      # blue glow at the right end (earlier: #2E8C80, first: #00BFA5)
 }
 
 CODE_FONT = "JetBrains Mono, Cascadia Mono, Consolas, Courier New"
@@ -186,21 +203,24 @@ def build_style():
 
 
 # small dark-only refinements on top of the translated light style sheet
+# (title bar, buttons and tabs as in VS Code Dark Modern)
 DARK_EXTRA = f"""
 QWidget#Header {{
-    background: {DARK_UI['surface']};
+    background: {DARK_UI['window']};
     border-bottom: 1px solid {DARK_UI['border']};
 }}
-QSlider::handle:horizontal {{ background: {DARK_UI['text']}; border: 2px solid {DARK_UI['accent']}; }}
 QToolButton[class="HeaderButton"] {{
-    background: {DARK_UI['raised']};
-    border: 1px solid {DARK_UI['border']};
+    background: #313131;
+    border: 1px solid #3C3C3C;
     color: {DARK_UI['text']};
 }}
-QToolButton[class="HeaderButton"]:hover {{ background: #3A3D42; border-color: #4A4D53; }}
-QToolButton[class="HeaderButton"]:pressed {{ background: #44474D; }}
-QToolButton#StopButton:disabled {{ background: {DARK_UI['raised']}; color: #6F737A; }}
+QToolButton[class="HeaderButton"]:hover {{ background: #3C3C3C; border-color: #4F4F4F; }}
+QToolButton[class="HeaderButton"]:pressed {{ background: #454545; }}
 QLabel#AppTitle {{ color: {DARK_UI['text']}; }}
+QTabBar::tab:selected {{ border-top: 2px solid {DARK_UI['accent']}; }}
+QSlider::handle:horizontal {{ background: {DARK_UI['text']}; border: 2px solid {DARK_UI['accent']}; }}
+QToolButton#StopButton:disabled {{ background: #313131; color: #6E6E6E; }}
+QPushButton[class="Teal"] {{ color: {DARK_UI['window']}; }}
 QMenuBar {{ background: {DARK_UI['window']}; }}
 QStatusBar {{ background: {DARK_UI['window']}; }}
 QToolTip {{ background: {DARK_UI['raised']}; color: {DARK_UI['text']}; border: 1px solid {DARK_UI['border']}; }}
@@ -218,7 +238,7 @@ QMainWindow, QDialog {{
 }}
 QWidget#Header {{
     background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                stop:0 {C['header_a']}, stop:1 {C['header_b']});
+                stop:0 {C['header_a']}, stop:0.6 {C['header_a']}, stop:1 {C['header_b']});
 }}
 QWidget#Header QLabel {{
     color: white;
@@ -247,15 +267,15 @@ QToolButton[class="HeaderButton"]:pressed {{
     background: rgba(255,255,255,0.45);
 }}
 QToolButton#RunButton {{
-    color: white;
-    background: {C['orange']};
+    color: {C['navy']};
+    background: {C['mint']};
     border: none;
     border-radius: 9px;
     padding: 6px 16px;
     font-weight: 700;
 }}
-QToolButton#RunButton:hover {{ background: #FFA000; }}
-QToolButton#RunButton:disabled {{ background: #FFCC80; }}
+QToolButton#RunButton:hover {{ background: #94DDBF; }}
+QToolButton#RunButton:disabled {{ background: #CDEFE0; }}
 QToolButton#StopButton {{
     color: white;
     background: {C['pink']};
@@ -328,7 +348,7 @@ QPushButton {{
     padding: 7px 14px;
     font-weight: 600;
 }}
-QPushButton:hover {{ background: #2196F3; }}
+QPushButton:hover {{ background: #528CF1; }}
 QPushButton:pressed {{ background: {C['primary_dark']}; }}
 QPushButton[flat="true"], QPushButton.Secondary, QPushButton[class="Secondary"] {{
     background: #E8F1FD;
@@ -336,7 +356,7 @@ QPushButton[flat="true"], QPushButton.Secondary, QPushButton[class="Secondary"] 
 }}
 QPushButton[class="Secondary"]:hover {{ background: #D6E8FD; }}
 QPushButton[class="Teal"] {{ background: {C['teal']}; }}
-QPushButton[class="Teal"]:hover {{ background: #1DE9B6; color: {C['text']}; }}
+QPushButton[class="Teal"]:hover {{ background: {C['mint']}; color: {C['navy']}; }}
 QPushButton[class="Orange"] {{ background: {C['orange']}; }}
 QPushButton[class="Pink"] {{ background: {C['pink']}; }}
 QPushButton[class="Purple"] {{ background: {C['purple']}; }}

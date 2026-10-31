@@ -1278,8 +1278,8 @@ def _ver(ip, args, nargout):
     if nargout:
         return s
     ip.write("-" * 60 + f"\n{s}\nOpen-source software (MIT License)\n"
-             "Al-Hadara University College - Department of Computer Techniques Engineering\n"
-             "Developed by: محمد عبدالرحمن محمود  -  https://mohmadev.com/\n"
+             "MATLAB-like environment for Control Engineering Fundamentals\n"
+             "Developed by: Mohammed Abd Alrahman  -  https://mohmadev.com/\n"
              "Support: support@mohmadev.com\n" + "-" * 60 + "\n")
 
 

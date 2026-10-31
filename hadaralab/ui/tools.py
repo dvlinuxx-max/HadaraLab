@@ -192,11 +192,10 @@ class PIDTuner(ToolDialog):
             v2.addWidget(gc)
             gc.changed.connect(self.schedule)
         row = QHBoxLayout()
-        auto = QPushButton("Auto Tune")
-        auto.setProperty("class", "Purple")
+        auto = QPushButton("Auto Tune")             # brand blue (default button)
         auto.clicked.connect(self.auto_tune)
         zn = QPushButton("Ziegler-Nichols")
-        zn.setProperty("class", "Orange")
+        zn.setProperty("class", "Teal")
         zn.setToolTip("Ogata ch. 10 - second method (critical gain Kcr, period Pcr),\n"
                       "or first method (S-shaped step response) if the loop never becomes unstable.")
         zn.clicked.connect(self.ziegler_nichols)

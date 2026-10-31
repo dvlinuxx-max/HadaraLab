@@ -1,6 +1,6 @@
-# سياسة الخصوصية وإشعار اسم الكلية — HadaraLab
+# سياسة الخصوصية والإشعارات — HadaraLab
 
-آخر تحديث: 2026-10-30
+آخر تحديث: 2026-10-31
 
 ## سياسة الخصوصية
 
@@ -15,25 +15,25 @@
 7. **الروابط الخارجية**: لا يُفتح الموقع الإلكتروني أو البريد الإلكتروني الواردان في نافذة «حول البرنامج» إلا إذا نقر المستخدم عليهما بنفسه، وعندها يتولى المتصفح أو برنامج البريد على جهاز المستخدم معالجتهما وفق سياسات الخصوصية الخاصة بهما.
 8. **حذف البيانات**: يكفي لحذف كل ما يتعلق بالبرنامج حذفُ مجلد البرنامج، والمجلد `Documents\HadaraLab`، والمجلد `%LOCALAPPDATA%\HadaraLab`، ومفتاح السجل المذكور أعلاه.
 
-## إشعار بشأن اسم الكلية
+## حقوق تصميم الأيقونة والهوية البصرية
 
-- **اسم كلية الحضارة الجامعة** ملكٌ لكلية الحضارة الجامعة.
-- يُستخدم الاسم في هذا البرنامج **لأغراض هذا المشروع البرمجي فقط**، بوصفه مشروعاً تابعاً لقسم هندسة تقنيات الحاسوب في الكلية.
-- **لا تشمل رخصة MIT** الخاصة بالشيفرة المصدرية اسمَ الكلية.
-- لا يجوز استخدام الاسم خارج هذا المشروع إلا بإذن مسبق من كلية الحضارة الجامعة.
-- عند إعادة استخدام الشيفرة المصدرية في مشروع آخر، يجب حذف اسم الكلية منه.
+- صمَّم أيقونة البرنامج وهويته البصرية (الشعار والألوان) **أحمد البصري** ([@dcssi_](https://www.instagram.com/dcssi_/)).
+- حقوق التصميم محفوظة للمصمم، ويُستخدم التصميم في هذا البرنامج بإذنه.
+- **لا تشمل رخصة MIT** الخاصة بالشيفرة المصدرية الأيقونةَ ولا الشعار.
+- لا يجوز استخدام الأيقونة أو الشعار خارج هذا المشروع إلا بإذن مسبق من المصمم.
 
 ## التواصل
 
-- برمجة وإعداد: محمد عبدالرحمن محمود
+- برمجة وإعداد: محمد عبدالرحمن محمود — https://www.instagram.com/devlopxx/
+- تصميم الأيقونة والهوية البصرية: أحمد البصري — https://www.instagram.com/dcssi_/
 - الموقع الإلكتروني: https://mohmadev.com/
 - البريد الإلكتروني للدعم: support@mohmadev.com
 
 ---
 
-# Privacy Policy and College Name Notice — HadaraLab
+# Privacy Policy and Notices — HadaraLab
 
-Last updated: 2026-10-30
+Last updated: 2026-10-31
 
 ## Privacy policy
 
@@ -48,16 +48,16 @@ HadaraLab runs entirely on the user's computer:
 7. **External links:** the website and e-mail address in the About window open only when you click them, in your own browser or mail program, under their own privacy policies.
 8. **Removing all data:** delete the program folder, the `Documents\HadaraLab` folder, the `%LOCALAPPDATA%\HadaraLab` folder and the registry key above.
 
-## College name notice
+## Icon and visual identity
 
-- **The name of Al-Hadara University College** belongs to Al-Hadara University College.
-- It is used in this program **solely for this software project**, as a project of the college's Department of Computer Techniques Engineering.
-- **The MIT License of the source code does not cover** the college name.
-- The name may not be used outside this project without prior permission from Al-Hadara University College.
-- Anyone reusing the source code in another project must remove the college name.
+- The app icon and visual identity (logo and colors) were designed by **Ahmed Al Basri** ([instagram.com/dcssi_](https://www.instagram.com/dcssi_/)).
+- The design rights belong to the designer, and the design is used in this program with his permission.
+- **The MIT License of the source code does not cover** the icon or the logo.
+- The icon and logo may not be used outside this project without the designer's prior permission.
 
 ## Contact
 
-- Developed by: محمد عبدالرحمن محمود
+- Developed by: Mohammed Abd Alrahman — https://www.instagram.com/devlopxx/
+- Icon and visual identity: Ahmed Al Basri — https://www.instagram.com/dcssi_/
 - Website: https://mohmadev.com/
 - Support: support@mohmadev.com

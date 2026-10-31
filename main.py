@@ -23,7 +23,7 @@ from PySide6.QtGui import QColor, QFont, QFontDatabase, QIcon, QLinearGradient, 
 from PySide6.QtWidgets import QApplication, QSplashScreen
 
 from hadaralab import __version__
-from hadaralab.ui.theme import asset, build_style, is_dark, load_saved_theme
+from hadaralab.ui.theme import apply_link_colors, asset, build_style, load_saved_theme
 
 
 def make_splash():
@@ -32,28 +32,23 @@ def make_splash():
     pm.fill(QColor("white"))
     p = QPainter(pm)
     p.setRenderHint(QPainter.RenderHint.Antialiasing)
+    # brand navy, lit by blue at the top-left and bottom-right corners (same in both themes)
     g = QLinearGradient(0, 0, w, h)
-    if is_dark():
-        g.setColorAt(0, QColor("#1E1F22"))
-        g.setColorAt(0.65, QColor("#2B2D30"))
-        g.setColorAt(1, QColor("#2D4A80"))
-    else:
-        g.setColorAt(0, QColor("#1F388C"))
-        g.setColorAt(1, QColor("#2E8C80"))
+    g.setColorAt(0, QColor("#528CF1"))
+    g.setColorAt(0.28, QColor("#020A21"))
+    g.setColorAt(0.72, QColor("#020A21"))
+    g.setColorAt(1, QColor("#528CF1"))
     p.fillRect(0, 0, w, h, g)
-    p.setBrush(QColor(255, 255, 255, 14 if is_dark() else 40))
-    p.setPen(Qt.PenStyle.NoPen)
-    p.drawEllipse(QRectF(w - 210, -90, 320, 320))
-    p.drawEllipse(QRectF(-80, h - 120, 220, 220))
-    logo = QPixmap(asset("app_icon_256.png")).scaled(160, 160, Qt.AspectRatioMode.KeepAspectRatio,
-                                                     Qt.TransformationMode.SmoothTransformation)
-    p.drawPixmap(40, 90, logo)
+    logo = QPixmap(asset("brand/logo_mark_white.png")).scaled(
+        130, 130, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
+    p.drawPixmap(60, 105, logo)
     p.setPen(QColor("white"))
     p.setFont(QFont("Segoe UI", 30, QFont.Weight.Black))
-    p.drawText(QRectF(225, 105, 380, 60), Qt.AlignmentFlag.AlignLeft, "HadaraLab")
+    p.drawText(QRectF(215, 112, 390, 60), Qt.AlignmentFlag.AlignLeft, "HadaraLab")
+    p.setPen(QColor("#B3BED3"))
     p.setFont(QFont("Segoe UI", 10))
-    p.drawText(QRectF(228, 168, 380, 50), Qt.AlignmentFlag.AlignLeft,
-               f"Version {__version__}  ·  Al-Hadara University College\nComputer Techniques Engineering")
+    p.drawText(QRectF(218, 175, 390, 75), Qt.AlignmentFlag.AlignLeft,
+               f"Version {__version__}\nControl Engineering Fundamentals\nComputer Techniques Engineering")
     p.end()
     return pm
 
@@ -117,6 +112,7 @@ def main():
             QFontDatabase.addApplicationFont(os.path.join(fonts, name))
     load_saved_theme()                 # chosen in Settings > Theme
     app.setStyleSheet(build_style())
+    apply_link_colors(app)
 
     splash = QSplashScreen(make_splash())
     splash.show()
