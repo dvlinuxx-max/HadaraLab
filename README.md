@@ -26,9 +26,9 @@
 
 ## التثبيت
 
-**من متجر Microsoft** (الأسهل، والتحديثات تصل تلقائياً): اضغط زر المتجر في الأعلى.
+**من متجر Microsoft** (الأسهل، والتحديثات تصل تلقائيا): اضغط زر المتجر في الأعلى.
 
-**دون تثبيت:** نزّل ملف ZIP من [Releases](https://github.com/dvlinuxx-max/HadaraLab/releases)، وفُكّ الضغط، ثم شغّل `HadaraLab.exe`.
+**دون تثبيت:** نزل ملف ZIP من [Releases](https://github.com/dvlinuxx-max/HadaraLab/releases)، وفك الضغط، ثم شغل `HadaraLab.exe`.
 
 **من الكود:**
 
@@ -68,7 +68,7 @@ margin(G)
 
 ## الأمثلة
 
-في المجلد `examples` أربعة عشر مثالاً مرتبة وفق مفردات المادة، وفي `examples/ogata` ستة عشر برنامجاً
+في المجلد `examples` أربعة عشر مثالا مرتبة وفق مفردات المادة، وفي `examples/ogata` ستة عشر برنامجا
 من كتاب *Ogata, Modern Control Engineering*.
 
 ## الاختبارات
@@ -83,7 +83,7 @@ python tests/test_engine.py
 powershell -ExecutionPolicy Bypass -File build_store.ps1
 ```
 
-يشغّل الاختبارات ويبني البرنامج ثم ينشئ الملف `store\HadaraLab_<version>_x64.msix`. يحتاج إلى Windows SDK.
+يشغل الاختبارات ويبني البرنامج ثم ينشئ الملف `store\HadaraLab_<version>_x64.msix`. يحتاج إلى Windows SDK.
 
 ## الفريق
 
